@@ -27,6 +27,12 @@ order by count(message_id) desc
 --ex6
 select tweet_id from tweets
 where length(content)>15
+--ex7
+select activity_date as day, 
+count(distinct user_id)as active_users
+from activity 
+where activity_date between '2019-06-28' and '2019-07-27'
+group by activity_date
 --ex8
 select count(id) from employees
 where extract(month from joining_date) between 1 and 7
