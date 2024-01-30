@@ -47,3 +47,48 @@ FROM pages as p1
 left join page_likes as p2
 on p1.page_id=p2.page_id
 where p2.user_id is null
+--mid-course test
+--câu 1
+select distinct replacement_cost, title from film
+order by replacement_cost
+--câu 2
+select
+sum(case
+when replacement_cost between 9.99 and 19.99 then 1
+else 0
+end) as low,
+sum(case
+when replacement_cost between 20.00 and 24.99 then 1
+else 0
+end) as mediumn,
+sum(case
+when replacement_cost between 25.00 and 29.99 then 1
+else 0
+end) as high
+from film
+--câu 3
+select f.title, f.length, c.name
+from film as f
+join film_category as fc on f.film_id=fc.film_id
+join category as c on fc.category_id=c.category_id
+order by length desc
+--câu 4
+select c.name,count(c.name)
+from film as f
+join film_category as fc on f.film_id=fc.film_id
+join category as c on fc.category_id=c.category_id
+group by c.name
+order by count(c.name) desc
+--câu 5
+select a.actor_id,a.first_name,a.last_name, count(fa.film_id) 
+from film_actor  as fa
+join actor as a on fa.actor_id=a.actor_id
+group by a.actor_id
+order by count(fa.film_id) desc
+--câu 6
+select count(a.address_id) filter (where c.customer_id is null)
+from address as a
+left join customer as c
+on a.address_id=c.address_id
+--câu 7
+
