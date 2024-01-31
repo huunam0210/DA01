@@ -5,6 +5,11 @@ from city
 inner join country 
 on city.countrycode = country.code
 group by continent
+--ex2
+  SELECT round(cast(count(t.email_id)as decimal)/COUNT(e.email_id) ,2) as confirm_rate
+FROM emails as e 
+left join texts as t 
+on e.email_id=t.email_id and t.signup_action='Confirmed'
 --ex3
 SELECT
 age_bucket, 
@@ -91,4 +96,19 @@ from address as a
 left join customer as c
 on a.address_id=c.address_id
 --câu 7
-
+select city, sum(p.amount)
+from city 
+join address as a on a.city_id=city.city_id
+join customer as c on c.address_id=a.address_id
+join payment as p on p.customer_id=c.customer_id
+group by city 
+order by sum(p.amount) desc
+--câu 8
+select city, country, sum(p.amount)
+from city 
+join address as a on a.city_id=city.city_id
+join customer as c on c.address_id=a.address_id
+join country on country.country_id=city.country_id
+join payment as p on p.customer_id=c.customer_id
+group by city, country
+order by sum(p.amount) desc
