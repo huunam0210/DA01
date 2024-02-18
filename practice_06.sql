@@ -35,4 +35,15 @@ left join page_likes as p2
 on p1.page_id=p2.page_id) as new_table
 where user_id is null
 --ex5
+SELECT
+  EXTRACT(MONTH FROM current_month.event_date) AS month,
+ count(distinct current_month.user_id)
+FROM user_actions AS current_month
+WHERE EXISTS (
+  SELECT last_month.user_id
+  FROM user_actions AS last_month
+  WHERE last_month.user_id = current_month.user_id
+  and extract(month from last_month.event_date)=extract(month from current_month.event_date)-1)
+  and extract(month  from current_month.event_date)='7' 
+group by month
 
