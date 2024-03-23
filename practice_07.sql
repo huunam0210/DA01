@@ -44,6 +44,20 @@ WITH latest_transactions_cte AS (
     ORDER BY tweet_date
     ROWS BETWEEN 2 PRECEDING AND CURRENT ROW),2) AS rolling_avg
 FROM tweets
+  --ex6
+  with repeated_payment as (SELECT merchant_id, credit_card_id, amount,
+extract(epoch from (transaction_timestamp - LAG(transaction_timestamp) 
+OVER (PARTITION BY merchant_id,  credit_card_id,amount ORDER BY transaction_timestamp)))/60 as timestamp
+FROM transactions)
+    
+select count(merchant_id) as payment_count from repeated_payment
+where timestamp<=10with repeated_payment as (SELECT merchant_id, credit_card_id, amount,
+extract(epoch from (transaction_timestamp - LAG(transaction_timestamp) 
+OVER (PARTITION BY merchant_id,  credit_card_id,amount ORDER BY transaction_timestamp)))/60 as timestamp
+FROM transactions)
+    
+select count(merchant_id) as payment_count from repeated_payment
+where timestamp<=10
 --ex7
 with ranked_spend_cte as (SELECT 
   category, 
