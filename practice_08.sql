@@ -13,4 +13,11 @@ from activity)
 select round( cast(count(distinct player_id) as decimal)/(select count(distinct player_id) from activity),2) as fraction
 from first_date
 where gap_day=1
---ex3
+--ex4
+with a as (select visited_on,sum(amount) as amount from customer group by visited_on)
+select a.visited_on, 
+sum(amount) over (order by visited_on range between interval '6' day preceding and current row) as amount, 
+round(cast(sum(amount) over (order by visited_on range between interval '6' day preceding and current row) as decimal)/7,2) as average_amount
+from a
+order by visited_on
+offset 6
