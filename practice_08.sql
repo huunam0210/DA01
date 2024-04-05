@@ -13,6 +13,14 @@ from activity)
 select round( cast(count(distinct player_id) as decimal)/(select count(distinct player_id) from activity),2) as fraction
 from first_date
 where gap_day=1
+ --ex3
+ select case
+when id%2 <>0 and id = (select count(id) from seat) then id
+ when id%2=0 then id-1
+ else id +1
+ end as id,
+ student
+ from  seat order by id
 --ex4
 with a as (select visited_on,sum(amount) as amount from customer group by visited_on)
 select a.visited_on, 
@@ -21,6 +29,10 @@ round(cast(sum(amount) over (order by visited_on range between interval '6' day 
 from a
 order by visited_on
 offset 6
+ --ex5
+ select round(cast(sum(tiv_2016) as decimal),2) as tiv_2016 from insurance
+where tiv_2015 in  (select tiv_2015 from insurance group by tiv_2015 having count(tiv_2015)>1 )
+and (lat, lon) in (select lat, lon from insurance group by lat, lon having count (*)=1)
 --ex6
 with earner as (select t1.name as employee, t1.salary as salary,t2.name as department, 
 dense_rank() over(partition by t2.name order by salary desc) as rank
